@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>lesson_0</name>
+    </assembly>
+    <members>
+        <member name="M:lesson_0.Controllers.UserController.Token(lesson_0.Models.Requests.LoginRequest)">
+            <summary>
+            Упрощенный процесс аутентификации путем передачи идентификатор пользователя и получения токена для дальнейшего прохождения авторизации
+            </summary>
+            <returns> Bearer токен </returns>
+            <response code="200">Успешная аутентификация</response>
+            <response code="400">Невалидные данные</response>
+            <response code="404">Пользователь не найден</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.UserController.Register(lesson_0.Models.Requests.UserRegisterRequest)">
+            <summary>
+            Регистрация нового пользователя
+            </summary>
+            <param name="user"></param>
+            <response code="200">Успешная регистрация</response>
+            <response code="400">Невалидные данные</response>
+            <response code="404">Пользователь не найден</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.UserController.GetUser(System.String)">
+            <summary>
+            Получение анкеты пользователя
+            </summary>
+            <param name="id">Идентификатор пользователя</param>
+            <response code="200">Успешное получение анкеты пользователя</response>
+            <response code="400">Невалидные данные</response>
+            <response code="404">Анкета не найдена</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="P:lesson_0.Models.Requests.LoginRequest.UserName">
+            <summary>Логин</summary>
+            <example>otus</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.LoginRequest.Password">
+            <summary>Пароль</summary>
+            <example>Секретная строка</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.LoginResponse.Token">
+            <summary>Bearer токен</summary>
+            <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.UserName">
+            <summary>Логин</summary>
+            <example>otus</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.FirstName">
+            <summary>Имя</summary>
+            <example>Отус</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.SecondName">
+            <summary>Фамилия</summary>
+            <example>Отусов</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.BirthDate">
+            <summary>Дата рождения</summary>
+            <example>2017-02-01</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.Biography">
+            <summary>Интересы</summary>
+            <example>Хобби, интересы и т.п.</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.City">
+            <summary>Город</summary>
+            <example>Москва</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterRequest.Password">
+            <summary>Пароль</summary>
+            <example>Секретная строка</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.UserRegisterResponse.UserId">
+            <summary>Идентификатор пользователя</summary>
+            <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.UserGetRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+            <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.ServerErrorModel.Message">
+            <summary>Описание ошибки</summary>
+        </member>
+        <member name="P:lesson_0.Models.ServerErrorModel.RequestId">
+            <summary>Идентификатор запроса. Предназначен для более быстрого поиска проблем.</summary>
+        </member>
+        <member name="P:lesson_0.Models.ServerErrorModel.Code">
+            <summary>Код ошибки. Предназначен для классификации проблем и более быстрого решения проблем.</summary>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.UserId">
+            <summary>Идентификатор пользователя</summary>
+            <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.FirstName">
+            <summary>Имя</summary>
+            <example>Отус</example>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.SecondName">
+            <summary>Фамилия</summary>
+            <example>Отусов</example>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.BirthDate">
+            <summary>Дата рождения</summary>
+            <example>2017-02-01</example>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.Biography">
+            <summary>Интересы</summary>
+            <example>Хобби, интересы и т.п.</example>
+        </member>
+        <member name="P:lesson_0.Models.UserModel.City">
+            <summary>Город</summary>
+            <example>Москва</example>
+        </member>
+    </members>
+</doc>
