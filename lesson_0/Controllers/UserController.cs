@@ -134,5 +134,39 @@ namespace lesson_0.Controllers
             else if (result.UserId == default) return NotFound();
             else return Ok(result);
         }
+
+        /// <summary>
+        /// Поиск анкет
+        /// </summary>
+        /// <param name="firstName">Условие поиска по имени</param>
+        /// <param name="lastName">Условие поиска по фамилии</param>
+        /// <response code="200">Успешные поиск пользователя</response>
+        /// <response code="400">Невалидные данные</response>
+        /// <response code="500">Ошибка сервера</response>
+        /// <response code="503">Ошибка сервера</response>
+        [Authorize]
+        [HttpGet("/user/search")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(UserGetRequest), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ServerErrorModel), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponseHeader(StatusCodes.Status500InternalServerError, "Retry-After", "integer", "Время, через которое еще раз нужно сделать запрос")]
+        [ProducesResponseType(typeof(ServerErrorModel), StatusCodes.Status503ServiceUnavailable)]
+        [SwaggerResponseHeader(StatusCodes.Status500InternalServerError, "Retry-After", "integer", "Время, через которое еще раз нужно сделать запрос")]
+        public async Task<IActionResult> SearchUser(string firstName, string lastName)
+        {
+            var result = await _mediator.Send(new UserSearchRequest() { FirstName = firstName, LastName = lastName });
+            if (result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ServerErrorModel()
+                {
+                    Code = 500,
+                    RequestId = HttpContext.Connection.Id,
+                    Message = "Ошибка сервера"
+                });
+            }
+            else if (result.UserId == default) return NotFound();
+            else return Ok(result);
+        }
     }
 }

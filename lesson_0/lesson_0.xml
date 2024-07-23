@@ -37,6 +37,17 @@
             <response code="500">Ошибка сервера</response>
             <response code="503">Ошибка сервера</response>
         </member>
+        <member name="M:lesson_0.Controllers.UserController.SearchUser(System.String,System.String)">
+            <summary>
+            Поиск анкет
+            </summary>
+            <param name="firstName">Условие поиска по имени</param>
+            <param name="lastName">Условие поиска по фамилии</param>
+            <response code="200">Успешные поиск пользователя</response>
+            <response code="400">Невалидные данные</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
         <member name="P:lesson_0.Models.Requests.LoginRequest.UserName">
             <summary>Логин</summary>
             <example>otus</example>
@@ -84,6 +95,14 @@
         <member name="P:lesson_0.Models.UserGetRequest.UserId">
             <summary>Идентификатор пользователя</summary>
             <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.UserSearchRequest.FirstName">
+            <summary>Условие поиска по имени</summary>
+            <example>Иванов</example>
+        </member>
+        <member name="P:lesson_0.Models.UserSearchRequest.LastName">
+            <summary>Условие поиска по фамилии</summary>
+            <example>Иван</example>
         </member>
         <member name="P:lesson_0.Models.ServerErrorModel.Message">
             <summary>Описание ошибки</summary>

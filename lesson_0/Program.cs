@@ -23,6 +23,8 @@ builder.Host
            .As<IRequestHandler<LoginRequest, LoginResponse>>();
         builder.Register((c, p) => new UserGetHandler(c.Resolve<ILifetimeScope>()))
            .As<IRequestHandler<UserGetRequest, UserModel>>();
+        builder.Register((c, p) => new UserSearchHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<UserSearchRequest, UserModel>>();
 
         builder.RegisterType<Mediator>()
                .As<IMediator>()

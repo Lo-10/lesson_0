@@ -54,7 +54,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"userName\": \"otus\",\r\n  \"password\": \"Секретная строка\"\r\n}",
+					"raw": "{\r\n  \"userName\": \"otus1\",\r\n  \"firstName\": \"Отус\",\r\n  \"secondName\": \"Отусов\",\r\n  \"birthDate\": \"2017-02-01\",\r\n  \"biography\": \"Хобби, интересы и т.п.\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"Секретная строка\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -62,14 +62,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:7071/login",
+					"raw": "http://localhost:7071/user/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "7071",
 					"path": [
-						"login"
+						"user",
+						"register"
 					]
 				}
 			},
@@ -77,6 +78,49 @@
 		},
 		{
 			"name": "Get User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MjExODM0ODUsImV4cCI6MTcyMzc3NTQ4NSwiaXNzIjoib3R1cyIsImF1ZCI6IkFENmtiVDJyeUhhYXRpVENFNm04c3ZaOEVYOUFVMllUcC9PRnNuMTVnZGpGT25Icit2TEF3TFo0RGI3cFlrSGxXdz09In0.6kHTD2v_qu7GdQPCOnH4reOe5meSJcIRoZO3k64Fux8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:7071/user/get/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"user",
+						"get",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "d0f4633a-3d08-4f34-a51c-0fbd36bc3e44"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search User",
 			"request": {
 				"auth": {
 					"type": "bearer",
