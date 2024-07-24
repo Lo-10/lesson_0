@@ -5,6 +5,7 @@
     using lesson_0.Models.Requests;
     using MediatR;
     using Npgsql;
+    using System.Data;
     using System.Net.Security;
     using System.Security.Cryptography;
 
@@ -30,22 +31,37 @@
 
                 await using var dataSource = NpgsqlDataSource.Create(connectionString);
 
-                await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
-
+                var dt = ConvertCSVtoDataTable("users.csv");
                 var userId = Guid.NewGuid();
-                cmd.CommandText = $"INSERT INTO public.users (UserId, UserName, FirstName, SecondName, BirthDate, Biography, City, Password)" +
-                                  $" VALUES (@UserId, @UserName, @FirstName, @SecondName,@BirthDate, @Biography, @City, @Password)";
-                cmd.Parameters.AddWithValue("UserId", userId);
-                cmd.Parameters.AddWithValue("UserName", request.UserName);
-                cmd.Parameters.AddWithValue("FirstName", request.FirstName);
-                cmd.Parameters.AddWithValue("SecondName", request.SecondName);
-                cmd.Parameters.AddWithValue("BirthDate", request.BirthDate);
-                cmd.Parameters.AddWithValue("Biography", request.Biography);
-                cmd.Parameters.AddWithValue("City", request.City);
-                cmd.Parameters.AddWithValue("Password", Encryption.HashPassword(request.Password));
+                int i = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (i == 208688) break;
+                    await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
 
-                await cmd.ExecuteNonQueryAsync(cancellationToken);
+                    userId = Guid.NewGuid();
+                    cmd.CommandText = $"INSERT INTO public.users (UserId, UserName, FirstName, SecondName, BirthDate, Biography, City, Password)" +
+                                      $" VALUES (@UserId, @UserName, @FirstName, @SecondName,@BirthDate, @Biography, @City, @Password)";
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    cmd.Parameters.AddWithValue("UserName", Guid.NewGuid());
+                    cmd.Parameters.AddWithValue("FirstName", row["FirstName"]);
+                    cmd.Parameters.AddWithValue("SecondName", row["SecondName"]);
+                    cmd.Parameters.AddWithValue("BirthDate", row["BirthDate"]);
+                    cmd.Parameters.AddWithValue("Biography", "Biography");
+                    cmd.Parameters.AddWithValue("City", row["City"]);
+                    cmd.Parameters.AddWithValue("Password", Encryption.HashPassword(request.Password));
 
+                    try
+                    {
+                        await cmd.ExecuteNonQueryAsync(cancellationToken);
+                        i++;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        
+                    }
+                }
                 return new UserRegisterResponse() { UserId = userId.ToString() };
             }
             catch (Exception ex)
@@ -63,6 +79,30 @@
             {
 
             }
+        }
+
+        public static DataTable ConvertCSVtoDataTable(string strFilePath)
+        {
+            DataTable dt = new DataTable();
+            using (StreamReader sr = new StreamReader(strFilePath))
+            {
+                string[] headers = sr.ReadLine().Split(',');
+                foreach (string header in headers)
+                {
+                    dt.Columns.Add(header);
+                }
+                while (!sr.EndOfStream)
+                {
+                    string[] rows = sr.ReadLine().Split(',');
+                    DataRow dr = dt.NewRow();
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        dr[i] = rows[i];
+                    }
+                    dt.Rows.Add(dr);
+                }
+            }
+            return dt;
         }
     }
 }
