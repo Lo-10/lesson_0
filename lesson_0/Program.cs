@@ -6,8 +6,10 @@ using lesson_0.Models;
 using lesson_0.Models.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -88,6 +90,22 @@ builder.Services.AddSwaggerGen(setup =>
             });
 });
 builder.Services.AddSwaggerExamples();
+
+builder.Services.AddSingleton<NpgsqlDataSource, NpgsqlDataSource>(provider =>
+{
+    var pgServer = Environment.GetEnvironmentVariables()["pgsql_server"];
+    var pgPort = Environment.GetEnvironmentVariables()["pgsql_port"];
+    var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
+    var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
+    var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
+    var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
+
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+
+    var dataSource = dataSourceBuilder.Build();
+
+    return dataSource;
+});
 
 var app = builder.Build();
 

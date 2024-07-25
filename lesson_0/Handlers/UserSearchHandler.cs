@@ -7,35 +7,25 @@
 
     public partial class UserSearchHandler : IRequestHandler<UserSearchRequest, UserModel>
     {
-        private readonly IMediator _mediator;
+        private readonly NpgsqlDataSource _dataSource;
         public UserSearchHandler(ILifetimeScope scope)
         {
-
+            _dataSource = scope.Resolve<NpgsqlDataSource>();
         }
 
         public async Task<UserModel> Handle(UserSearchRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var pgServer = Environment.GetEnvironmentVariables()["pgsql_server"];
-                var pgPort = Environment.GetEnvironmentVariables()["pgsql_port"];
-                var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
-                var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
-                var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
-                var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
+                await using var cmd = _dataSource.CreateCommand("SELECT * FROM users");
 
-                await using var dataSource = NpgsqlDataSource.Create(connectionString);
-
-                await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
-
-                var userId = Guid.NewGuid();
                 cmd.CommandText = $"SELECT * FROM public.users " +
-                                  $"WHERE firstName LIKE '%{request.FirstName}%' and secondName LIKE '%{request.LastName}%'" +
-                                  $"ORDER BY UserId ASC";
+                                  $"WHERE firstName ILIKE '%{request.FirstName}%' and secondName ILIKE '%{request.LastName}%'" +
+                                  $"ORDER BY UserId";
 
                 var user = new UserModel();
 
-                NpgsqlDataReader reader = await cmd.ExecuteReaderAsync();
+                await using NpgsqlDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
 
                 while (await reader.ReadAsync())
                 {
@@ -56,7 +46,7 @@
             }
             finally
             {
-
+               
             }
         }
     }

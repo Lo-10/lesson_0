@@ -10,28 +10,18 @@
 
     public partial class LoginHandler : IRequestHandler<LoginRequest, LoginResponse>
     {
-        private readonly IMediator _mediator;
+        private readonly NpgsqlDataSource _dataSource;
         public LoginHandler(ILifetimeScope scope)
         {
-
+            _dataSource = scope.Resolve<NpgsqlDataSource>();
         }
 
         public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var pgServer = Environment.GetEnvironmentVariables()["pgsql_server"];
-                var pgPort = Environment.GetEnvironmentVariables()["pgsql_port"];
-                var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
-                var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
-                var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
-                var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
+                await using var cmd = _dataSource.CreateCommand("SELECT * FROM users");
 
-                await using var dataSource = NpgsqlDataSource.Create(connectionString);
-
-                await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
-
-                var userId = Guid.NewGuid();
                 cmd.CommandText = $"SELECT password FROM public.users " +
                                   $"WHERE UserName = '{request.UserName}'";
 

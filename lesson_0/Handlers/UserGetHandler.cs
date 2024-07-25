@@ -7,10 +7,10 @@
 
     public partial class UserGetHandler : IRequestHandler<UserGetRequest, UserModel>
     {
-        private readonly IMediator _mediator;
+        private readonly NpgsqlDataSource _dataSource;
         public UserGetHandler(ILifetimeScope scope)
         {
-
+            _dataSource = scope.Resolve<NpgsqlDataSource>();
         }
 
         public async Task<UserModel> Handle(UserGetRequest request, CancellationToken cancellationToken)
@@ -28,7 +28,6 @@
 
                 await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
 
-                var userId = Guid.NewGuid();
                 cmd.CommandText = $"SELECT * FROM public.users " +
                                   $"WHERE UserId = '{request.UserId}'";
 
