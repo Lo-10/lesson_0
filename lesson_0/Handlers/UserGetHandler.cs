@@ -10,30 +10,21 @@
         private readonly NpgsqlDataSource _dataSource;
         public UserGetHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<NpgsqlDataSource>();
+            _dataSource = scope.Resolve<ReadDataSource>().DataSource;
         }
 
         public async Task<UserModel> Handle(UserGetRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var pgServer = Environment.GetEnvironmentVariables()["pgsql_server"];
-                var pgPort = Environment.GetEnvironmentVariables()["pgsql_port"];
-                var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
-                var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
-                var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
-                var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
-
-                await using var dataSource = NpgsqlDataSource.Create(connectionString);
-
-                await using var cmd = dataSource.CreateCommand("SELECT * FROM users");
+                await using var cmd = _dataSource.CreateCommand();
 
                 cmd.CommandText = $"SELECT * FROM public.users " +
                                   $"WHERE UserId = '{request.UserId}'";
 
                 var user = new UserModel();
 
-                NpgsqlDataReader reader = await cmd.ExecuteReaderAsync();
+                await using NpgsqlDataReader reader = await cmd.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
                 {

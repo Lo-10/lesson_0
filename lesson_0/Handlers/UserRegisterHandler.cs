@@ -2,25 +2,24 @@
 {
     using Autofac;
     using lesson_0.Accession;
+    using lesson_0.Models;
     using lesson_0.Models.Requests;
     using MediatR;
     using Npgsql;
-    using System.Net.Security;
-    using System.Security.Cryptography;
 
     public partial class UserRegisterHandler : IRequestHandler<UserRegisterRequest, UserRegisterResponse>
     {
         private readonly NpgsqlDataSource _dataSource;
         public UserRegisterHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<NpgsqlDataSource>();
+            _dataSource = scope.Resolve<WriteDataSource>().DataSource;
         }
 
         public async Task<UserRegisterResponse> Handle(UserRegisterRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                await using var cmd = _dataSource.CreateCommand("SELECT * FROM users");
+                await using var cmd = _dataSource.CreateCommand();
 
                 var userId = Guid.NewGuid();
                 cmd.CommandText = $"INSERT INTO public.users (UserId, UserName, FirstName, SecondName, BirthDate, Biography, City, Password)" +

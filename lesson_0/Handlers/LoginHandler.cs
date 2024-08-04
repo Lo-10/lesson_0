@@ -2,6 +2,7 @@
 {
     using Autofac;
     using lesson_0.Accession;
+    using lesson_0.Models;
     using lesson_0.Models.Requests;
     using MediatR;
     using Microsoft.IdentityModel.Tokens;
@@ -13,14 +14,14 @@
         private readonly NpgsqlDataSource _dataSource;
         public LoginHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<NpgsqlDataSource>();
+            _dataSource = scope.Resolve<ReadDataSource>().DataSource;
         }
 
         public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                await using var cmd = _dataSource.CreateCommand("SELECT * FROM users");
+                await using var cmd = _dataSource.CreateCommand();
 
                 cmd.CommandText = $"SELECT password FROM public.users " +
                                   $"WHERE UserName = '{request.UserName}'";

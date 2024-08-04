@@ -28,6 +28,36 @@ builder.Host
         builder.Register((c, p) => new UserSearchHandler(c.Resolve<ILifetimeScope>()))
            .As<IRequestHandler<UserSearchRequest, UserModel>>();
 
+        builder.Register((c, p) =>
+        {
+            var pgServer = Environment.GetEnvironmentVariables()["pgsql_server_master"];
+            var pgPort = Environment.GetEnvironmentVariables()["pgsql_port_master"];
+            var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
+            var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
+            var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
+            var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
+
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+
+            var dataSource = dataSourceBuilder.Build();
+            return new WriteDataSource(dataSource);            
+        }).As(typeof(WriteDataSource)).SingleInstance();
+
+        builder.Register((c, p) =>
+        {
+            var pgServer = Environment.GetEnvironmentVariables()["pgsql_server_slave"];
+            var pgPort = Environment.GetEnvironmentVariables()["pgsql_port_slave"];
+            var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
+            var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
+            var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
+            var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
+
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+
+            var dataSource = dataSourceBuilder.Build();
+            return new ReadDataSource(dataSource);
+        }).As(typeof(ReadDataSource)).SingleInstance();
+
         builder.RegisterType<Mediator>()
                .As<IMediator>()
                .SingleInstance();
@@ -90,22 +120,6 @@ builder.Services.AddSwaggerGen(setup =>
             });
 });
 builder.Services.AddSwaggerExamples();
-
-builder.Services.AddSingleton<NpgsqlDataSource, NpgsqlDataSource>(provider =>
-{
-    var pgServer = Environment.GetEnvironmentVariables()["pgsql_server"];
-    var pgPort = Environment.GetEnvironmentVariables()["pgsql_port"];
-    var pgDb = Environment.GetEnvironmentVariables()["pgsql_db"];
-    var pgUser = Environment.GetEnvironmentVariables()["pgsql_user"];
-    var pgPassord = Environment.GetEnvironmentVariables()["pgsql_password"];
-    var connectionString = $"Server={pgServer};Port={pgPort};Username={pgUser};Password={pgPassord};Database={pgDb}";
-
-    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-
-    var dataSource = dataSourceBuilder.Build();
-
-    return dataSource;
-});
 
 var app = builder.Build();
 

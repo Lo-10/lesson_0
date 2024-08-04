@@ -1,17 +1,11 @@
 ﻿using Autofac;
-using lesson_0.Accession;
 using lesson_0.Models;
 using lesson_0.Models.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Net.Mime;
-using System.Security.Claims;
-using XAct.Users;
 
 namespace lesson_0.Controllers
 {

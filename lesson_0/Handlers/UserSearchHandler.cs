@@ -10,14 +10,14 @@
         private readonly NpgsqlDataSource _dataSource;
         public UserSearchHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<NpgsqlDataSource>();
+            _dataSource = scope.Resolve<ReadDataSource>().DataSource;
         }
 
         public async Task<UserModel> Handle(UserSearchRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                await using var cmd = _dataSource.CreateCommand("SELECT * FROM users");
+                await using var cmd = _dataSource.CreateCommand();
 
                 cmd.CommandText = $"SELECT * FROM public.users " +
                                   $"WHERE firstName ILIKE '%{request.FirstName}%' and secondName ILIKE '%{request.LastName}%'" +
