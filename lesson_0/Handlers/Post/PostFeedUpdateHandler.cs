@@ -22,7 +22,7 @@
             try
             {
                 var post = notification.Post;
-                // Находим всех друзей, которым необходимо перестроить ленты постов
+                // Находим всех подписчиков, которым необходимо перестроить ленты постов
                 await using var cmd = _dataSource.CreateCommand();
 
                 cmd.CommandText = $"SELECT * FROM public.friends " +
@@ -37,6 +37,7 @@
                     friends.Add(reader["UserId"] as string);
                 }
 
+                // Перестраиваем ленту подписчиков
                 foreach (var userId in friends)
                 {
                     _cache.TryGetValue(userId, out List<PostModel> feed);
@@ -44,10 +45,8 @@
                     // Если в ленте уже есть пост (требуется обновление) - заменяем
                     feed.RemoveAll(p => p.PostId == post.PostId);
                     feed.Add(post);
-                    _cache.Set(userId, feed.Take(1000).OrderByDescending(p=>p.PostCreatedAt).ToList());
-                    
+                    _cache.Set(userId, feed.Take(1000).OrderByDescending(p=>p.PostCreatedAt).ToList());                    
                 }
-
             }
             catch (Exception ex)
             {
