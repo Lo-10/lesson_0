@@ -2,11 +2,15 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using lesson_0.Accession;
 using lesson_0.Handlers;
+using lesson_0.Handlers.Freind;
 using lesson_0.Models;
 using lesson_0.Models.Requests;
+using lesson_0.Models.Requests.Friend;
+using lesson_0.Models.Requests.Post;
+using lesson_0.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -27,6 +31,24 @@ builder.Host
            .As<IRequestHandler<UserGetRequest, UserModel>>();
         builder.Register((c, p) => new UserSearchHandler(c.Resolve<ILifetimeScope>()))
            .As<IRequestHandler<UserSearchRequest, UserModel>>();
+        builder.Register((c, p) => new FriendAddHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<FriendAddRequest, FriendModel>>();
+        builder.Register((c, p) => new FriendDeleteHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<FriendDeleteRequest, bool?>>();
+        builder.Register((c, p) => new PostCreateHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<PostCreateRequest, PostModel>>();
+        builder.Register((c, p) => new PostUpdateHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<PostUpdateRequest, bool?>>();
+        builder.Register((c, p) => new PostGetHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<PostGetRequest, PostGetResponse>>();
+        builder.Register((c, p) => new PostDeleteHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<PostDeleteRequest, bool?>>();
+        builder.Register((c, p) => new PostFeedGetHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<PostFeedGetRequest, PostModel[]>>();
+        builder.Register((c, p) => new PostFeedUpdateHandler(c.Resolve<ILifetimeScope>()))
+           .As<INotificationHandler<PostFeedUpdateNotification>>();
+        builder.Register((c, p) => new PostFeedLoadHandler(c.Resolve<ILifetimeScope>()))
+           .As<INotificationHandler<PostFeedLoadNotification>>();
 
         builder.Register((c, p) =>
         {
@@ -40,7 +62,7 @@ builder.Host
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
 
             var dataSource = dataSourceBuilder.Build();
-            return new WriteDataSource(dataSource);            
+            return new WriteDataSource(dataSource);
         }).As(typeof(WriteDataSource)).SingleInstance();
 
         builder.Register((c, p) =>
@@ -60,6 +82,10 @@ builder.Host
 
         builder.RegisterType<Mediator>()
                .As<IMediator>()
+               .SingleInstance();
+
+        builder.RegisterType<MemoryCache>()
+               .As<IMemoryCache>()
                .SingleInstance();
     });
 
@@ -120,6 +146,10 @@ builder.Services.AddSwaggerGen(setup =>
             });
 });
 builder.Services.AddSwaggerExamples();
+builder.Services.AddMemoryCache();
+builder.Services.AddHostedService<QueuedPostFeedUpdateService>();
+builder.Services.AddHostedService<PostFeedLoadService>();
+builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => new PostFeedUpdateQueue(10000000));
 
 var app = builder.Build();
 

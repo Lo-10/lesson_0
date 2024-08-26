@@ -4,6 +4,82 @@
         <name>lesson_0</name>
     </assembly>
     <members>
+        <member name="M:lesson_0.Controllers.FriendController.AddFriend(System.String)">
+            <summary>
+            Создание поста
+            </summary>
+            <response code="200">Успешно создан пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.FriendController.DeleteFriend(System.String)">
+            <summary>
+            Удаление друга
+            </summary>
+            <param name="id">Идентификатор пользователя</param>
+            <response code="200">Пользователь успешно удалил из друзей пользователя</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.PostController.CreatePost(lesson_0.Models.Requests.Post.PostCreateRequest)">
+            <summary>
+            Создание поста
+            </summary>
+            <returns> Идентификатор поста </returns>
+            <response code="200">Успешно создан пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.PostController.UpdatePost(lesson_0.Models.Requests.Post.PostUpdateRequest)">
+            <summary>
+            Изменение поста
+            </summary>
+            <response code="200">Успешно изменен пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.PostController.GetPost(System.Guid)">
+            <summary>
+            Получение поста
+            </summary>
+            <param name="id" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор поста</param>
+            <response code="200">Успешно получен пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.PostController.DeletePost(System.Guid)">
+            <summary>
+            Удаление поста
+            </summary>
+            <param name="id" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор поста</param>
+            <response code="200">Успешно удален пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.PostController.GetPostFeed(System.Int32,System.Int32)">
+            <summary>
+            Получение постов друзей
+            </summary>
+            <param name="offset" example="100"></param>
+            <param name="limit" example="10"></param>
+            <response code="200">Успешно получены посты друзей</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
         <member name="M:lesson_0.Controllers.UserController.Token(lesson_0.Models.Requests.LoginRequest)">
             <summary>
             Упрощенный процесс аутентификации путем передачи идентификатор пользователя и получения токена для дальнейшего прохождения авторизации
@@ -48,6 +124,45 @@
             <response code="500">Ошибка сервера</response>
             <response code="503">Ошибка сервера</response>
         </member>
+        <member name="T:lesson_0.Handlers.PostFeedLoadHandler">
+            <summary> 
+            Обработчик запроса на "прогрев" кэша.
+            Данный механизм позволяет перестраивать кэш из СУБД
+            </summary>
+        </member>
+        <member name="P:lesson_0.Models.FriendModel.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.FriendModel.FriendId">
+            <summary>Идентификатор пользователя-друга</summary>
+        </member>
+        <member name="P:lesson_0.Models.PostModel.PostId">
+            <summary>Идентификатор поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.PostModel.Text">
+            <summary>Текст поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.PostModel.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.PostModel.PostCreatedAt">
+            <summary>Время создания поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.PostModel.PostUpdatedAt">
+            <summary>Время обновления поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Friend.FriendAddRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Friend.FriendAddRequest.FriendId">
+            <summary>Идентификатор пользователя-друга</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Friend.FriendDeleteRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Friend.FriendDeleteRequest.FriendId">
+            <summary>Идентификатор пользователя-друга</summary>
+        </member>
         <member name="P:lesson_0.Models.Requests.LoginRequest.UserName">
             <summary>Логин</summary>
             <example>otus</example>
@@ -59,6 +174,47 @@
         <member name="P:lesson_0.Models.Requests.LoginResponse.Token">
             <summary>Bearer токен</summary>
             <example>e4d2e6b0-cde2-42c5-aac3-0b8316f21e58</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostCreateRequest.Text">
+            <summary>Текст поста</summary>
+            <example>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostCreateRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostCreateResponse.PostId">
+            <summary>Идентификатор поста</summary>
+            <example>1d535fd6-7521-4cb1-aa6d-031be7123c4d</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostDeleteRequest.PostId">
+            <summary>Идентификатор поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostFeedGetRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostFeedUpdateNotification.Post">
+            <summary>Пост пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostGetRequest.PostId">
+            <summary>Идентификатор поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostGetResponse.PostId">
+            <summary>Идентификатор поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostGetResponse.Text">
+            <summary>Текст поста</summary>
+            <example>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostGetResponse.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostUpdateRequest.PostId">
+            <summary>Идентификатор поста</summary>
+            <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostUpdateRequest.Text">
+            <summary>Текст поста</summary>
+            <example>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.</example>
         </member>
         <member name="P:lesson_0.Models.Requests.UserRegisterRequest.UserName">
             <summary>Логин</summary>

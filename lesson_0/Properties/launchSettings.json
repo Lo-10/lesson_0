@@ -9,7 +9,7 @@
         "pgsql_server_master": "172.30.64.1",
         "pgsql_port_master": "5432",
         "pgsql_server_slave": "172.30.64.1",
-        "pgsql_port_slave": "5433",
+        "pgsql_port_slave": "5432",
         "pgsql_db": "lesson_0",
         "pgsql_user": "postgres",
         "pgsql_password": "password"

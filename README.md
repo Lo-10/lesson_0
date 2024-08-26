@@ -1,5 +1,5 @@
 Для запуск априложения:
-1. Создать таблицу в БД:
+1. Создать таблицы в БД:
 ```
 CREATE TABLE IF NOT EXISTS public.users
 (
@@ -13,6 +13,24 @@ CREATE TABLE IF NOT EXISTS public.users
     "password" character varying COLLATE pg_catalog."default",
 	CONSTRAINT "username_pkey" PRIMARY KEY ("username")
 )
+
+CREATE TABLE IF NOT EXISTS public.friends
+(
+    userid character varying COLLATE pg_catalog."default" NOT NULL,
+    friendid character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT friends_pkey PRIMARY KEY (userid, friendid)
+)
+
+CREATE TABLE IF NOT EXISTS public.posts
+(
+    userid character varying COLLATE pg_catalog."default" NOT NULL,
+    text character varying COLLATE pg_catalog."default" NOT NULL,
+    postid character varying COLLATE pg_catalog."default" NOT NULL,
+    postcreatedat timestamp with time zone NOT NULL,
+    postupdatedat timestamp with time zone NOT NULL,
+    CONSTRAINT posts_pkey PRIMARY KEY (postid)
+)
+
 ```
 2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .```
 3. Заменить переменные относящиеся к БД и запустить контейнер
