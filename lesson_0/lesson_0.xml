@@ -4,6 +4,27 @@
         <name>lesson_0</name>
     </assembly>
     <members>
+        <member name="M:lesson_0.Controllers.DialogController.CreatePost(System.Guid,lesson_0.Models.Requests.Dialog.SendMessageRequest)">
+            <summary>
+            Отправка сообщения пользователю
+            </summary>
+            <response code="200">Успешно отправлено сообщение</response>
+            <response code="400">Невалидные данные ввода</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
+        <member name="M:lesson_0.Controllers.DialogController.GetPost(System.Guid)">
+            <summary>
+            Получение поста
+            </summary>
+            <param name="userId" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор поста</param>
+            <response code="200">Успешно получен пост</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
         <member name="M:lesson_0.Controllers.FriendController.AddFriend(System.String)">
             <summary>
             Создание поста
@@ -130,6 +151,21 @@
             Данный механизм позволяет перестраивать кэш из СУБД
             </summary>
         </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.Text">
+            <summary>Текст сообщения</summary>
+            <example>Привет, как дела?</example>
+        </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.FromUserId">
+            <summary>Идентификатор пользователя-отправителя</summary>
+            <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
+        </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.ToUserId">
+            <summary>Идентификатор пользователя-получателя</summary>
+            <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
+        </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.CreatedAt">
+            <summary>Время создания сообщения</summary>
+        </member>
         <member name="P:lesson_0.Models.FriendModel.UserId">
             <summary>Идентификатор пользователя</summary>
         </member>
@@ -150,6 +186,22 @@
         </member>
         <member name="P:lesson_0.Models.PostModel.PostUpdatedAt">
             <summary>Время обновления поста</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.DialogGetRequest.FromUserId">
+            <summary>Идентификатор пользователя-отправителя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.DialogGetRequest.ToUserId">
+            <summary>Идентификатор пользователя-получателя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.Text">
+            <summary>Текст сообщения</summary>
+            <example>Привет, как дела?</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.FromUserId">
+            <summary>Идентификатор пользователя-отправителя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.ToUserId">
+            <summary>Идентификатор пользователя-получателя</summary>
         </member>
         <member name="P:lesson_0.Models.Requests.Friend.FriendAddRequest.UserId">
             <summary>Идентификатор пользователя</summary>
@@ -215,6 +267,9 @@
         <member name="P:lesson_0.Models.Requests.Post.PostUpdateRequest.Text">
             <summary>Текст поста</summary>
             <example>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.</example>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Post.PostUpdateRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
         </member>
         <member name="P:lesson_0.Models.Requests.UserRegisterRequest.UserName">
             <summary>Логин</summary>

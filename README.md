@@ -31,6 +31,15 @@ CREATE TABLE IF NOT EXISTS public.posts
     CONSTRAINT posts_pkey PRIMARY KEY (postid)
 )
 
+CREATE TABLE IF NOT EXISTS public.dialogs
+(
+    fromuserid character varying COLLATE pg_catalog."default" NOT NULL,
+    touserid character varying COLLATE pg_catalog."default" NOT NULL,
+    text character varying COLLATE pg_catalog."default" NOT NULL,
+    createdat bigint NOT NULL,
+    CONSTRAINT dialogs_pkey PRIMARY KEY (fromuserid, touserid)
+)
+
 ```
 2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .```
 3. Заменить переменные относящиеся к БД и запустить контейнер

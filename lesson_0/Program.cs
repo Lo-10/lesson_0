@@ -5,6 +5,7 @@ using lesson_0.Handlers;
 using lesson_0.Handlers.Freind;
 using lesson_0.Models;
 using lesson_0.Models.Requests;
+using lesson_0.Models.Requests.Dialog;
 using lesson_0.Models.Requests.Friend;
 using lesson_0.Models.Requests.Post;
 using lesson_0.Services;
@@ -49,6 +50,10 @@ builder.Host
            .As<INotificationHandler<PostFeedUpdateNotification>>();
         builder.Register((c, p) => new PostFeedLoadHandler(c.Resolve<ILifetimeScope>()))
            .As<INotificationHandler<PostFeedLoadNotification>>();
+        builder.Register((c, p) => new SendMessageHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<SendMessageRequest, bool?>>();
+        builder.Register((c, p) => new DialogGetHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<DialogGetRequest, DialogMessageModel[]>>();
 
         builder.Register((c, p) =>
         {
