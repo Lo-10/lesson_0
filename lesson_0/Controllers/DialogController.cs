@@ -64,10 +64,10 @@ namespace lesson_0.Controllers
         }
 
         /// <summary>
-        /// Получение поста
+        /// Получение диалога
         /// </summary>
-        /// <param name="userId" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор поста</param>
-        /// <response code="200">Успешно получен пост</response>
+        /// <param name="userId" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор пользователя-получателя</param>
+        /// <response code="200">Успешно получен диалог</response>
         /// <response code="400">Невалидные данные</response>
         /// <response code="401">Неавторизованный доступ</response>
         /// <response code="500">Ошибка сервера</response>
