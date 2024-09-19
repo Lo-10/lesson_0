@@ -12,10 +12,15 @@
         "pgsql_port_slave": "5432",
         "pgsql_db": "lesson_0",
         "pgsql_user": "postgres",
-        "pgsql_password": "password"
+        "pgsql_password": "password",
+        "rabbit_server": "172.30.64.1",
+        "rabbit_port": "5672",
+        "rabbit_user": "user",
+        "rabbit_password": "password"
+
       },
       "publishAllPorts": true
     }
   },
-  "$schema": "http://json.schemastore.org/launchsettings.json"  
+  "$schema": "http://json.schemastore.org/launchsettings.json"
 }

@@ -3,6 +3,7 @@
     using Autofac;
     using lesson_0.Models;
     using lesson_0.Models.Requests.Post;
+    using lesson_0.Services;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
     using Npgsql;
@@ -11,10 +12,12 @@
     {
         private readonly NpgsqlDataSource _dataSource;
         private readonly IMemoryCache _cache;
+        private readonly IEventBusService _eventBus;
         public PostFeedUpdateHandler(ILifetimeScope scope)
         {
             _dataSource = scope.Resolve<ReadDataSource>().DataSource;
             _cache = scope.Resolve<IMemoryCache>();
+            _eventBus = scope.Resolve<IEventBusService>();
         }
 
         public async Task Handle(PostFeedUpdateNotification notification, CancellationToken cancellationToken)
@@ -45,7 +48,9 @@
                     // Если в ленте уже есть пост (требуется обновление) - заменяем
                     feed.RemoveAll(p => p.PostId == post.PostId);
                     feed.Add(post);
-                    _cache.Set(userId, feed.Take(1000).OrderByDescending(p=>p.PostCreatedAt).ToList());                    
+                    _cache.Set(userId, feed.Take(1000).OrderByDescending(p=>p.PostCreatedAt).ToList());
+                    // отправляем пост подписчику через websocket
+                    await _eventBus.SendMessageAsync(userId, post, cancellationToken);                    
                 }
             }
             catch (Exception ex)

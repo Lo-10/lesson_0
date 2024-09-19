@@ -1,6 +1,8 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using lesson_0.Accession;
+using lesson_0.Controllers;
 using lesson_0.Handlers;
 using lesson_0.Handlers.Freind;
 using lesson_0.Models;
@@ -11,10 +13,14 @@ using lesson_0.Models.Requests.Post;
 using lesson_0.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using Saunter;
+using Saunter.AsyncApiSchema.v2;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -85,6 +91,18 @@ builder.Host
             return new ReadDataSource(dataSource);
         }).As(typeof(ReadDataSource)).SingleInstance();
 
+        //builder.Register((c, p) => new WSServer(c.Resolve<ILifetimeScope>()))
+        //       .As<IWSServer>()
+        //       .SingleInstance();
+
+        builder.Register((c, p) => new WSServer(c.Resolve<ILifetimeScope>()))
+               .As(typeof(WSServer))
+               .SingleInstance();
+
+        builder.RegisterType<EventBusService>()
+               .As<IEventBusService>()
+               .SingleInstance();
+
         builder.RegisterType<Mediator>()
                .As<IMediator>()
                .SingleInstance();
@@ -135,7 +153,7 @@ builder.Services.AddSwaggerGen(setup =>
         BearerFormat = "JWT",
         Name = "JWT Authentication",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
         Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
 
         Reference = new OpenApiReference
@@ -151,10 +169,40 @@ builder.Services.AddSwaggerGen(setup =>
             });
 });
 builder.Services.AddSwaggerExamples();
+builder.Services.AddAsyncApiSchemaGeneration(options =>
+{
+    // Specify example type(s) from assemblies to scan.
+    options.AssemblyMarkerTypes = new[] { typeof(WSServer) };
+
+    options.Middleware.UiTitle = "Streetlights API";
+    options.Middleware.Route = "/asyncapi/asyncapi.json";      
+    options.Middleware.UiBaseRoute = "/asyncapi/ui/";     
+    options.Middleware.UiTitle = "My AsyncAPI Documentation";
+    options.AsyncApi = new AsyncApiDocument
+    {
+        Info = new Info("OTUS Highload Architect Async", "1.0.0")
+        {
+            Description = "Спецификация асинхронного взаимодействия приложения, которое создается в процессе выполнения домашних заданий на курсе Highload Architect",
+            Contact = new Contact() { Email = "help@otus.ru", Url = "https://otus.ru/", Name = "OTUS" }
+        },
+        Servers =
+        {
+            ["prod"] = new Server("localhost","ws")
+        },
+        Id = "https://github.com/OtusTeam/highload",
+        Tags = { "otus", "highload architect" },
+        DefaultContentType = "application/json",
+    };
+
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddHostedService<QueuedPostFeedUpdateService>();
 builder.Services.AddHostedService<PostFeedLoadService>();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddSingleton<IBackgroundTaskQueue>(_ => new PostFeedUpdateQueue(10000000));
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -168,6 +216,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
+app.MapHub<WSServer>("/post/feed/posted", options =>
+{
+    options.ApplicationMaxBufferSize = 128;
+    options.TransportMaxBufferSize = 128;
+    options.LongPolling.PollTimeout = TimeSpan.FromMinutes(1);
+    options.Transports = HttpTransportType.LongPolling | HttpTransportType.WebSockets;
+});
+
 app.MapControllers();
+app.MapAsyncApiDocuments();
+app.MapAsyncApiUi();
 
 app.Run();
