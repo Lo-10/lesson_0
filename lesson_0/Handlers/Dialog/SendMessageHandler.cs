@@ -1,6 +1,7 @@
 ﻿namespace lesson_0.Handlers
 {
     using Autofac;
+    using lesson_0.Accession;
     using lesson_0.Models;
     using lesson_0.Models.Requests.Dialog;
     using MediatR;
@@ -8,28 +9,20 @@
 
     public partial class SendMessageHandler : IRequestHandler<SendMessageRequest, bool?>
     {
-        private readonly NpgsqlDataSource _dataSource;
+        private readonly IRedisCacheProvider _cache;
 
         public SendMessageHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<WriteDataSource>().DataSource;
+            _cache = scope.Resolve<IRedisCacheProvider>();
         }
 
         public async Task<bool?> Handle(SendMessageRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                await using var cmd = _dataSource.CreateCommand();
+                var messageCreatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
 
-                var messageCreatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-                cmd.CommandText = $"INSERT INTO public.dialogs (FromUserId, ToUserId, Text, CreatedAt)" +
-                                  $" VALUES (@FromUserId, @ToUserId, @Text, @CreatedAt)";
-                cmd.Parameters.AddWithValue("FromUserId", request.FromUserId);
-                cmd.Parameters.AddWithValue("ToUserId", request.ToUserId);
-                cmd.Parameters.AddWithValue("Text", request.Text);
-                cmd.Parameters.AddWithValue("CreatedAt", messageCreatedAt);
-
-                await cmd.ExecuteNonQueryAsync(cancellationToken);
+                var result = await _cache.SendMessageAsync(request.FromUserId.ToString(), request.ToUserId.ToString(), messageCreatedAt, request.Text);
 
                 return true;
             }

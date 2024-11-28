@@ -4,7 +4,7 @@
         <name>lesson_0</name>
     </assembly>
     <members>
-        <member name="M:lesson_0.Controllers.DialogController.SendMessage(System.Guid,lesson_0.Models.Requests.Dialog.SendMessageRequest)">
+        <member name="M:lesson_0.Controllers.DialogController.CreatePost(System.Guid,lesson_0.Models.Requests.Dialog.SendMessageRequest)">
             <summary>
             Отправка сообщения пользователю
             </summary>
@@ -14,7 +14,7 @@
             <response code="500">Ошибка сервера</response>
             <response code="503">Ошибка сервера</response>
         </member>
-        <member name="M:lesson_0.Controllers.DialogController.GetDialog(System.Guid)">
+        <member name="M:lesson_0.Controllers.DialogController.GetPost(System.Guid)">
             <summary>
             Получение диалога
             </summary>

@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using Npgsql;
 using Saunter;
 using Saunter.AsyncApiSchema.v2;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -91,9 +92,12 @@ builder.Host
             return new ReadDataSource(dataSource);
         }).As(typeof(ReadDataSource)).SingleInstance();
 
-        //builder.Register((c, p) => new WSServer(c.Resolve<ILifetimeScope>()))
-        //       .As<IWSServer>()
-        //       .SingleInstance();
+        builder.Register(cx => ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariables()["redis_conn"].ToString()))
+               .As<IConnectionMultiplexer>()
+               .SingleInstance();
+
+        builder.RegisterType<RedisCacheProvider>()
+               .As<IRedisCacheProvider>();
 
         builder.Register((c, p) => new WSServer(c.Resolve<ILifetimeScope>()))
                .As(typeof(WSServer))

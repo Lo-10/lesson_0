@@ -44,10 +44,27 @@ CREATE TABLE IF NOT EXISTS public.dialogs
 2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .```
 3. Заменить переменные относящиеся к БД и запустить контейнер
 ```
-docker run -it -p 7071:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_master=172.30.64.1" -e "pgsql_port_master=5432" -e "pgsql_server_slave=172.30.64.1" -e "pgsql_port_slave=5434" -e "pgsql_db=lesson_0" -e "pgsql_user=postgres" -e "pgsql_password=password" -e "rabbit_server=172.30.64.1" -e "rabbit_port=5672" -e "rabbit_user=user" -e "rabbit_password=password" -e "ASPNETCORE_ENVIRONMENT=Development" lesson_0
+docker run -it -p 7071:8080 -e "ASPNETCORE_HTTP_PORTS=8080"
+                            -e "pgsql_server_master=172.30.64.1"
+                            -e "pgsql_port_master=5432"
+                            -e "pgsql_server_slave=172.30.64.1"
+                            -e "pgsql_port_slave=5434"
+                            -e "pgsql_db=lesson_0"
+                            -e "pgsql_user=postgres"
+                            -e "pgsql_password=password"
+                            -e "rabbit_server=172.30.64.1"
+                            -e "rabbit_port=5672"
+                            -e "rabbit_user=user"
+                            -e "rabbit_password=password"
+                            -e "redis_conn=172.30.64.1:6379"
+                            -e "ASPNETCORE_ENVIRONMENT=Development"
+                            lesson_0
 ```
 4. Swagger UI доступен по пути /swagger/index.html
 5. AsyncAPI UI доступен по пути /asyncapi/ui/index.html
 6. Для подключения к сокет серверу ws://host:port/post/feed/posted
 7. После подключения к WS, для начала обмена отправить сообщение {"protocol":"json","version":1} <- последний символ обязатлен
 8. В RabbitMq создать Exchange posts, остальное автоматически создается и биндится
+9. В Redis создать функции:
+  - FUNCTION LOAD "#!lua name=otus\nredis.register_function('SendMessage', function(keys, args) return redis.call('XADD', 'dialog:'..keys[1]..':'..keys[2], args[1], 'CreatedAt', args[1], 'Text', args[2]) end)"
+  - FUNCTION LOAD "#!lua name=otus2\nredis.register_function('GetDialog', function(keys, args) return redis.call('XREAD', 'STREAMS', 'dialog:'..keys[1]..':'..keys[2], 'dialog:'..keys[2]..':'..keys[1], 0, 0) end)"

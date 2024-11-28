@@ -1,6 +1,7 @@
 ﻿namespace lesson_0.Handlers
 {
     using Autofac;
+    using lesson_0.Accession;
     using lesson_0.Models;
     using lesson_0.Models.Requests.Dialog;
     using lesson_0.Models.Requests.Post;
@@ -9,34 +10,32 @@
 
     public partial class DialogGetHandler : IRequestHandler<DialogGetRequest, DialogMessageModel[]>
     {
-        private readonly NpgsqlDataSource _dataSource;
+        private readonly IRedisCacheProvider _cache;
         public DialogGetHandler(ILifetimeScope scope)
         {
-            _dataSource = scope.Resolve<ReadDataSource>().DataSource;
+            _cache = scope.Resolve<IRedisCacheProvider>();
         }
 
         public async Task<DialogMessageModel[]> Handle(DialogGetRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                await using var cmd = _dataSource.CreateCommand();
+                List<DialogMessageModel> result = [];
 
-                cmd.CommandText = $"SELECT * FROM public.dialogs " +
-                                  $"WHERE FromUserId = '{request.FromUserId}' AND ToUserId = '{request.ToUserId}'";
-
-                await using NpgsqlDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-
-                var result = new List<DialogMessageModel>();
-
-                while (await reader.ReadAsync())
+                var res = await _cache.GetDialogAsync(request.FromUserId.ToString(), request.ToUserId.ToString());
+                for (int i = 0; i < res?.Length; i++)
                 {
-                    result.Add(new DialogMessageModel()
+                    for (int j = 0; j < res[i].Length; j++)
                     {
-                        FromUserId = request.FromUserId,
-                        ToUserId = request.ToUserId,
-                        Text = (string)reader["Text"],
-                        CreatedAt = (long)reader["CreatedAt"]
-                    });
+                        {
+                            result.Add(new DialogMessageModel()
+                            {
+                                FromUserId = request.FromUserId,
+                                ToUserId = request.ToUserId,
+                                Text = res[i][1][j][1][3].ToString()
+                            });
+                        }
+                    }
                 }
 
                 return result.ToArray();

@@ -16,8 +16,8 @@
         "rabbit_server": "172.30.64.1",
         "rabbit_port": "5672",
         "rabbit_user": "user",
-        "rabbit_password": "password"
-
+        "rabbit_password": "password",
+        "redis_conn": "172.30.64.1:6379"
       },
       "publishAllPorts": true
     }
