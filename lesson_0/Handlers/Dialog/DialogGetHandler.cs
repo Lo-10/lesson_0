@@ -25,7 +25,7 @@
                 var res = await _cache.GetDialogAsync(request.FromUserId.ToString(), request.ToUserId.ToString());
                 for (int i = 0; i < res?.Length; i++)
                 {
-                    for (int j = 0; j < res[i].Length; j++)
+                    for (int j = 0; j < res[i][1].Length; j++)
                     {
                         {
                             result.Add(new DialogMessageModel()
