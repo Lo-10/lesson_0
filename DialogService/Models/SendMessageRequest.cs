@@ -1,25 +1,21 @@
 ﻿using MediatR;
 using System.Text.Json.Serialization;
 
-namespace lesson_0.Models.Requests.Dialog
+namespace Dialogs.Models
 {
     public class SendMessageRequest : IRequest<bool?>
     {
         /// <summary>Текст сообщения</summary>
         /// <example>Привет, как дела?</example>
-        [JsonPropertyName("text")]
-        public required string Text { get; set; }
+        public string Text { get; set; }
 
         /// <summary>Идентификатор пользователя-отправителя</summary>
-        [JsonIgnore]
-        public Guid FromUserId { get; set; }
+        public string FromUserId { get; set; }
 
         /// <summary>Идентификатор пользователя-получателя</summary>
-        [JsonIgnore]
-        public Guid ToUserId { get; set; }
+        public string ToUserId { get; set; }
 
         /// <summary>Идентификатор запроса (x-request-id)</summary>
-        [JsonIgnore]
         public string RequestId { get; set; }
     }
 }

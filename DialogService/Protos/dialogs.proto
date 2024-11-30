@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option csharp_namespace = "Dialogs";
+
+package dialogs;
+
+
+service DialogService {
+  rpc MessageSend (SendMessageRequest) returns (SendMessageReply);
+  rpc DialogGet (DialogGetRequest) returns (DialogGetReply);
+}
+
+message SendMessageRequest {
+  /// <summary>Текст сообщения</summary>
+  string Text = 1;
+  /// <summary>Идентификатор пользователя-отправителя</summary>
+  string FromUserId = 2;
+  /// <summary>Идентификатор пользователя-получателя</summary>
+  string ToUserId = 3;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 4;
+}
+
+message SendMessageReply {
+  bool result = 1;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 4;
+}
+
+message DialogGetRequest {
+  /// <summary>Идентификатор пользователя-отправителя</summary>
+  string FromUserId = 1;
+  /// <summary>Идентификатор пользователя-получателя</summary>
+  string ToUserId = 2;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 3;
+}
+
+message DialogGetReply {
+  repeated DialogMessage result = 1;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 2;
+}
+
+message DialogMessage {
+  /// <summary>Текст сообщения</summary>
+  string Text = 1;
+  /// <summary>Идентификатор пользователя-отправителя</summary>
+  string FromUserId = 2;
+  /// <summary>Идентификатор пользователя-получателя</summary>
+  string ToUserId = 3;
+  /// <summary>Время создания сообщения</summary>
+  string CreatedAt = 4;
+}

@@ -193,6 +193,9 @@
         <member name="P:lesson_0.Models.Requests.Dialog.DialogGetRequest.ToUserId">
             <summary>Идентификатор пользователя-получателя</summary>
         </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.DialogGetRequest.RequestId">
+            <summary>Идентификатор запроса (x-request-id)</summary>
+        </member>
         <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.Text">
             <summary>Текст сообщения</summary>
             <example>Привет, как дела?</example>
@@ -202,6 +205,9 @@
         </member>
         <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.ToUserId">
             <summary>Идентификатор пользователя-получателя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.RequestId">
+            <summary>Идентификатор запроса (x-request-id)</summary>
         </member>
         <member name="P:lesson_0.Models.Requests.Friend.FriendAddRequest.UserId">
             <summary>Идентификатор пользователя</summary>
@@ -347,6 +353,94 @@
         <member name="P:lesson_0.Models.UserModel.City">
             <summary>Город</summary>
             <example>Москва</example>
+        </member>
+        <member name="T:DialogsClient.DialogsReflection">
+            <summary>Holder for reflection information generated from Protos/dialogs.proto</summary>
+        </member>
+        <member name="P:DialogsClient.DialogsReflection.Descriptor">
+            <summary>File descriptor for Protos/dialogs.proto</summary>
+        </member>
+        <member name="F:DialogsClient.SendMessageRequest.TextFieldNumber">
+            <summary>Field number for the "Text" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.Text" -->
+        <member name="F:DialogsClient.SendMessageRequest.FromUserIdFieldNumber">
+            <summary>Field number for the "FromUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.FromUserId" -->
+        <member name="F:DialogsClient.SendMessageRequest.ToUserIdFieldNumber">
+            <summary>Field number for the "ToUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.ToUserId" -->
+        <member name="F:DialogsClient.SendMessageRequest.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.RequestId" -->
+        <member name="F:DialogsClient.SendMessageReply.ResultFieldNumber">
+            <summary>Field number for the "result" field.</summary>
+        </member>
+        <member name="F:DialogsClient.SendMessageReply.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageReply.RequestId" -->
+        <member name="F:DialogsClient.DialogGetRequest.FromUserIdFieldNumber">
+            <summary>Field number for the "FromUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogGetRequest.FromUserId" -->
+        <member name="F:DialogsClient.DialogGetRequest.ToUserIdFieldNumber">
+            <summary>Field number for the "ToUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogGetRequest.ToUserId" -->
+        <member name="F:DialogsClient.DialogGetRequest.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogGetRequest.RequestId" -->
+        <member name="F:DialogsClient.DialogGetReply.ResultFieldNumber">
+            <summary>Field number for the "result" field.</summary>
+        </member>
+        <member name="F:DialogsClient.DialogGetReply.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogGetReply.RequestId" -->
+        <member name="F:DialogsClient.DialogMessage.TextFieldNumber">
+            <summary>Field number for the "Text" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.Text" -->
+        <member name="F:DialogsClient.DialogMessage.FromUserIdFieldNumber">
+            <summary>Field number for the "FromUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.FromUserId" -->
+        <member name="F:DialogsClient.DialogMessage.ToUserIdFieldNumber">
+            <summary>Field number for the "ToUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.ToUserId" -->
+        <member name="F:DialogsClient.DialogMessage.CreatedAtFieldNumber">
+            <summary>Field number for the "CreatedAt" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.CreatedAt" -->
+        <member name="P:DialogsClient.DialogService.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:DialogsClient.DialogService.DialogServiceClient">
+            <summary>Client for DialogService</summary>
+        </member>
+        <member name="M:DialogsClient.DialogService.DialogServiceClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for DialogService</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:DialogsClient.DialogService.DialogServiceClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for DialogService that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:DialogsClient.DialogService.DialogServiceClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:DialogsClient.DialogService.DialogServiceClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:DialogsClient.DialogService.DialogServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
         </member>
     </members>
 </doc>

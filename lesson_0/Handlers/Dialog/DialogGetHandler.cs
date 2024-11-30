@@ -1,52 +1,60 @@
 ﻿namespace lesson_0.Handlers
 {
     using Autofac;
-    using lesson_0.Accession;
+    using DialogsClient;
+    using Grpc.Net.Client;
     using lesson_0.Models;
     using lesson_0.Models.Requests.Dialog;
     using lesson_0.Models.Requests.Post;
     using MediatR;
     using Npgsql;
+    using System.Linq;
 
-    public partial class DialogGetHandler : IRequestHandler<DialogGetRequest, DialogMessageModel[]>
+    public partial class DialogGetHandler : IRequestHandler<Models.Requests.Dialog.DialogGetRequest, DialogMessageModel[]>
     {
-        private readonly IRedisCacheProvider _cache;
+        private readonly NpgsqlDataSource _dataSource;
+        private readonly ILogger<DialogGetHandler> _logger;
         public DialogGetHandler(ILifetimeScope scope)
         {
-            _cache = scope.Resolve<IRedisCacheProvider>();
+            _dataSource = scope.Resolve<ReadDataSource>().DataSource;
+            _logger = scope.Resolve<ILogger<DialogGetHandler>>();
         }
 
-        public async Task<DialogMessageModel[]> Handle(DialogGetRequest request, CancellationToken cancellationToken)
+        public async Task<DialogMessageModel[]> Handle(Models.Requests.Dialog.DialogGetRequest request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("{HandlerName}:{RequestId} Enter with request {@Request}", GetType().Name, request.RequestId, request);
             try
             {
-                List<DialogMessageModel> result = [];
+                using var channel = GrpcChannel.ForAddress(Environment.GetEnvironmentVariables()["dialogs_grpc_url"].ToString());
 
-                var res = await _cache.GetDialogAsync(request.FromUserId.ToString(), request.ToUserId.ToString());
-                for (int i = 0; i < res?.Length; i++)
+                var client = new DialogService.DialogServiceClient(channel);
+
+                var reply = await client.DialogGetAsync(new DialogsClient.DialogGetRequest
                 {
-                    for (int j = 0; j < res[i][1].Length; j++)
+                    FromUserId = request.FromUserId.ToString(),
+                    ToUserId = request.ToUserId.ToString(),
+                    RequestId = request.RequestId
+                });
+
+                var result = reply.Result.Select(m =>
+                    new DialogMessageModel()
                     {
-                        {
-                            result.Add(new DialogMessageModel()
-                            {
-                                FromUserId = request.FromUserId,
-                                ToUserId = request.ToUserId,
-                                Text = res[i][1][j][1][3].ToString()
-                            });
-                        }
-                    }
-                }
+                        FromUserId = Guid.Parse(m.FromUserId),
+                        ToUserId = Guid.Parse(m.ToUserId),
+                        Text = m.Text,
+                        CreatedAt = Int64.Parse(m.CreatedAt)
+                    });
 
                 return result.ToArray();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "{HandlerName}::{RequestId} Error: {ErrorMessage}", GetType().Name, request.RequestId, ex.Message);
                 return null;
             }
             finally
             {
-
+                _logger.LogInformation("{HandlerName}:{RequestId} Exit", GetType().Name, request.RequestId);
             }
         }
     }

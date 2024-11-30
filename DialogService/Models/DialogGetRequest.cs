@@ -1,20 +1,17 @@
 ﻿using MediatR;
 using System.Text.Json.Serialization;
 
-namespace lesson_0.Models.Requests.Dialog
+namespace Dialogs.Models
 {
-    public class DialogGetRequest : IRequest<DialogMessageModel[]>
+    public class DialogGetRequest : IRequest<DialogMessage[]>
     {
         /// <summary>Идентификатор пользователя-отправителя</summary>
-        [JsonIgnore]
-        public Guid FromUserId { get; set; }
+        public string FromUserId { get; set; }
 
         /// <summary>Идентификатор пользователя-получателя</summary>
-        [JsonIgnore]
-        public Guid ToUserId { get; set; }
+        public string ToUserId { get; set; }
 
         /// <summary>Идентификатор запроса (x-request-id)</summary>
-        [JsonIgnore]
         public string RequestId { get; set; }
     }
 }

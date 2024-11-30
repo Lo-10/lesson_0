@@ -10,6 +10,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["lesson_0/lesson_0.csproj", "lesson_0/"]
 COPY ["lesson_0/lesson_0.xml", "lesson_0/"]
+COPY ["lesson_0/Protos/dialogs.proto", "lesson_0/Protos/"]
 RUN dotnet restore "./lesson_0/lesson_0.csproj"
 COPY . .
 WORKDIR "/src/lesson_0"

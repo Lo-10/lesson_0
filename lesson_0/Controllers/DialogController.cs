@@ -33,7 +33,8 @@ namespace lesson_0.Controllers
         /// <response code="500">Ошибка сервера</response>
         /// <response code="503">Ошибка сервера</response>
         [Authorize]
-        [HttpPost("/dialog/{userId}/send")]
+        [HttpPost("api/v1.0/dialog/{userId}/send")]
+        [HttpPost("api/v2.0/dialog/{userId}/send")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +50,7 @@ namespace lesson_0.Controllers
 
             request.FromUserId = fromUserId;
             request.ToUserId = userId;
+            request.RequestId = HttpContext.TraceIdentifier;
 
             var result = await _mediator.Send(request);
             if (result == null)
@@ -73,7 +75,8 @@ namespace lesson_0.Controllers
         /// <response code="500">Ошибка сервера</response>
         /// <response code="503">Ошибка сервера</response>
         [Authorize]
-        [HttpGet("/dialog/{userId}/list")]
+        [HttpGet("api/v1.0/dialog/{userId}/list")]
+        [HttpGet("api/v2.0/dialog/{userId}/list")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(DialogMessageModel[]), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -88,7 +91,8 @@ namespace lesson_0.Controllers
 
             var result = await _mediator.Send(new DialogGetRequest {
                 FromUserId = fromUserId,
-                ToUserId = userId
+                ToUserId = userId,
+                RequestId = HttpContext.TraceIdentifier
             });
 
             if (result == null)
