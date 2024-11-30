@@ -1,12 +1,9 @@
-﻿namespace lesson_0.Handlers
+﻿namespace Dialogs.Handlers
 {
     using Autofac;
-    using Grpc.Net.Client;
     using MediatR;
     using Npgsql;
-    using DialogsClient;
-    using lesson_0.Models;
-    using SendMessageRequest = Models.Requests.Dialog.SendMessageRequest;
+    using Dialogs.Models;
 
     public partial class SendMessageHandler : IRequestHandler<SendMessageRequest, bool?>
     {
@@ -24,19 +21,19 @@
             _logger.LogInformation("{HandlerName}:{RequestId} Enter with request {@Request}", GetType().Name, request.RequestId, request);
             try
             {
-                using var channel = GrpcChannel.ForAddress(Environment.GetEnvironmentVariables()["dialogs_grpc_url"].ToString());
+                await using var cmd = _dataSource.CreateCommand();
 
-                var client = new DialogService.DialogServiceClient(channel);
+                var messageCreatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+                cmd.CommandText = $"INSERT INTO public.dialogs (FromUserId, ToUserId, Text, CreatedAt)" +
+                                  $" VALUES (@FromUserId, @ToUserId, @Text, @CreatedAt)";
+                cmd.Parameters.AddWithValue("FromUserId", request.FromUserId);
+                cmd.Parameters.AddWithValue("ToUserId", request.ToUserId);
+                cmd.Parameters.AddWithValue("Text", request.Text);
+                cmd.Parameters.AddWithValue("CreatedAt", messageCreatedAt);
 
-                var reply = await client.MessageSendAsync(new DialogsClient.SendMessageRequest
-                {
-                    FromUserId = request.FromUserId.ToString(),
-                    ToUserId = request.ToUserId.ToString(),
-                    Text = request.Text,
-                    RequestId = request.RequestId
-                });
+                await cmd.ExecuteNonQueryAsync(cancellationToken);
 
-                return reply.Result;
+                return true;
             }
             catch (Exception ex)
             {
