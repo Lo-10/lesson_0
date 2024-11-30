@@ -26,7 +26,7 @@ namespace lesson_0.Services
             _factory = new ConnectionFactory()
             {
                 HostName = Environment.GetEnvironmentVariables()["rabbit_server"].ToString(),
-                Port = (int)Environment.GetEnvironmentVariables()["rabbit_port"],
+                Port = Int32.Parse(Environment.GetEnvironmentVariables()["rabbit_port"].ToString()),
                 UserName = Environment.GetEnvironmentVariables()["rabbit_user"].ToString(),
                 Password = Environment.GetEnvironmentVariables()["rabbit_password"].ToString()
             };

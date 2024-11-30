@@ -56,3 +56,6 @@ docker run -it -p 7072:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_mas
 6. Для подключения к сокет серверу ws://host:port/post/feed/posted
 7. После подключения к WS, для начала обмена отправить сообщение {"protocol":"json","version":1} <- последний символ обязатлен
 8. В RabbitMq создать Exchange posts, остальное автоматически создается и биндится
+9. В Redis создать функции:
+  - FUNCTION LOAD "#!lua name=otus\nredis.register_function('SendMessage', function(keys, args) return redis.call('XADD', 'dialog:'..keys[1]..':'..keys[2], args[1], 'CreatedAt', args[1], 'Text', args[2]) end)"
+  - FUNCTION LOAD "#!lua name=otus2\nredis.register_function('GetDialog', function(keys, args) return redis.call('XREAD', 'STREAMS', 'dialog:'..keys[1]..':'..keys[2], 'dialog:'..keys[2]..':'..keys[1], 0, 0) end)"
