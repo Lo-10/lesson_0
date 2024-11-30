@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS public.dialogs
 )
 
 ```
-2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .```
+2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .``` 
 2.1. Из директории DialogService собрать образ сервиса диалогов ```docker build -t dialogs .```
 3. Заменить переменные относящиеся к БД и запустить контейнер
 ```
