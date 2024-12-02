@@ -25,6 +25,17 @@
             <response code="500">Ошибка сервера</response>
             <response code="503">Ошибка сервера</response>
         </member>
+        <member name="M:lesson_0.Controllers.DialogController.GetUnreaded">
+            <summary>
+            Получение количества непрочитанных сообщений
+            </summary>
+            <param name="userId" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор пользователя-получателя</param>
+            <response code="200">Успешно получен диалог</response>
+            <response code="400">Невалидные данные</response>
+            <response code="401">Неавторизованный доступ</response>
+            <response code="500">Ошибка сервера</response>
+            <response code="503">Ошибка сервера</response>
+        </member>
         <member name="M:lesson_0.Controllers.FriendController.AddFriend(System.String)">
             <summary>
             Создание поста
@@ -163,6 +174,13 @@
             <summary>Идентификатор пользователя-получателя</summary>
             <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
         </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.IsRead">
+            <summary>Прочитано получателем</summary>
+        </member>
+        <member name="P:lesson_0.Models.DialogMessageModel.MessageId">
+            <summary>Идентификатор сообщения</summary>
+            <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
+        </member>
         <member name="P:lesson_0.Models.DialogMessageModel.CreatedAt">
             <summary>Время создания сообщения</summary>
         </member>
@@ -207,6 +225,12 @@
             <summary>Идентификатор пользователя-получателя</summary>
         </member>
         <member name="P:lesson_0.Models.Requests.Dialog.SendMessageRequest.RequestId">
+            <summary>Идентификатор запроса (x-request-id)</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.UnreadMessageCountGetRequest.UserId">
+            <summary>Идентификатор пользователя</summary>
+        </member>
+        <member name="P:lesson_0.Models.Requests.Dialog.UnreadMessageCountGetRequest.RequestId">
             <summary>Идентификатор запроса (x-request-id)</summary>
         </member>
         <member name="P:lesson_0.Models.Requests.Friend.FriendAddRequest.UserId">
@@ -354,6 +378,75 @@
             <summary>Город</summary>
             <example>Москва</example>
         </member>
+        <member name="T:CountersClient.CountersReflection">
+            <summary>Holder for reflection information generated from Protos/counters.proto</summary>
+        </member>
+        <member name="P:CountersClient.CountersReflection.Descriptor">
+            <summary>File descriptor for Protos/counters.proto</summary>
+        </member>
+        <member name="F:CountersClient.MessageCreatedRequest.FromUserIdFieldNumber">
+            <summary>Field number for the "FromUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.MessageCreatedRequest.FromUserId" -->
+        <member name="F:CountersClient.MessageCreatedRequest.ToUserIdFieldNumber">
+            <summary>Field number for the "ToUserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.MessageCreatedRequest.ToUserId" -->
+        <member name="F:CountersClient.MessageCreatedRequest.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.MessageCreatedRequest.RequestId" -->
+        <member name="F:CountersClient.MessageCreatedRequest.MessageIdFieldNumber">
+            <summary>Field number for the "MessageId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.MessageCreatedRequest.MessageId" -->
+        <member name="F:CountersClient.MessageCreatedReply.ResultFieldNumber">
+            <summary>Field number for the "result" field.</summary>
+        </member>
+        <member name="F:CountersClient.MessageCreatedReply.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.MessageCreatedReply.RequestId" -->
+        <member name="F:CountersClient.GetUnreadMessageCountRequest.UserIdFieldNumber">
+            <summary>Field number for the "UserId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.GetUnreadMessageCountRequest.UserId" -->
+        <member name="F:CountersClient.GetUnreadMessageCountRequest.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.GetUnreadMessageCountRequest.RequestId" -->
+        <member name="F:CountersClient.GetUnreadMessageCountReply.ResultFieldNumber">
+            <summary>Field number for the "result" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.GetUnreadMessageCountReply.Result" -->
+        <member name="F:CountersClient.GetUnreadMessageCountReply.RequestIdFieldNumber">
+            <summary>Field number for the "RequestId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:CountersClient.GetUnreadMessageCountReply.RequestId" -->
+        <member name="P:CountersClient.CounterService.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:CountersClient.CounterService.CounterServiceClient">
+            <summary>Client for CounterService</summary>
+        </member>
+        <member name="M:CountersClient.CounterService.CounterServiceClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for CounterService</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:CountersClient.CounterService.CounterServiceClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for CounterService that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:CountersClient.CounterService.CounterServiceClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:CountersClient.CounterService.CounterServiceClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:CountersClient.CounterService.CounterServiceClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
         <member name="T:DialogsClient.DialogsReflection">
             <summary>Holder for reflection information generated from Protos/dialogs.proto</summary>
         </member>
@@ -376,9 +469,14 @@
             <summary>Field number for the "RequestId" field.</summary>
         </member>
         <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.RequestId" -->
-        <member name="F:DialogsClient.SendMessageReply.ResultFieldNumber">
-            <summary>Field number for the "result" field.</summary>
+        <member name="F:DialogsClient.SendMessageRequest.MessageIdFieldNumber">
+            <summary>Field number for the "MessageId" field.</summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageRequest.MessageId" -->
+        <member name="F:DialogsClient.SendMessageReply.MessageIdFieldNumber">
+            <summary>Field number for the "MessageId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.SendMessageReply.MessageId" -->
         <member name="F:DialogsClient.SendMessageReply.RequestIdFieldNumber">
             <summary>Field number for the "RequestId" field.</summary>
         </member>
@@ -418,6 +516,14 @@
             <summary>Field number for the "CreatedAt" field.</summary>
         </member>
         <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.CreatedAt" -->
+        <member name="F:DialogsClient.DialogMessage.IsReadFieldNumber">
+            <summary>Field number for the "IsRead" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.IsRead" -->
+        <member name="F:DialogsClient.DialogMessage.MessageIdFieldNumber">
+            <summary>Field number for the "MessageId" field.</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:DialogsClient.DialogMessage.MessageId" -->
         <member name="P:DialogsClient.DialogService.Descriptor">
             <summary>Service descriptor</summary>
         </member>

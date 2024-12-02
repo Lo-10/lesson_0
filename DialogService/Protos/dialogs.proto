@@ -19,12 +19,15 @@ message SendMessageRequest {
   string ToUserId = 3;
   /// <summary>Идентификатор запроса (x-request-id)</summary>
   string RequestId = 4;
+   /// <summary>Идентификатор сообщения</summary>
+  string MessageId = 5;
 }
 
 message SendMessageReply {
-  bool result = 1;
+  /// <summary>Идентификатор сообщения</summary>
+  string MessageId = 1;
   /// <summary>Идентификатор запроса (x-request-id)</summary>
-  string RequestId = 4;
+  string RequestId = 2;
 }
 
 message DialogGetRequest {
@@ -51,4 +54,8 @@ message DialogMessage {
   string ToUserId = 3;
   /// <summary>Время создания сообщения</summary>
   string CreatedAt = 4;
+  /// <summary>Прочитано получателем</summary>
+  bool IsRead = 5;
+  /// <summary>Идентификатор сообщения</summary>
+  string MessageId = 6;
 }

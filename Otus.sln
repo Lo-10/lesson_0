@@ -5,7 +5,9 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_0", "lesson_0\lesson_0.csproj", "{31F6DB46-C2C4-4B6E-857F-190429CF90C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dialogs", "DialogService\Dialogs.csproj", "{881929B3-E7CD-40ED-AE20-74BF57C1A48B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dialogs", "DialogService\Dialogs.csproj", "{881929B3-E7CD-40ED-AE20-74BF57C1A48B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Counters", "Counters\Counters.csproj", "{8371725F-DD3C-4A6D-81E1-120AC8D5E3B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{881929B3-E7CD-40ED-AE20-74BF57C1A48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{881929B3-E7CD-40ED-AE20-74BF57C1A48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{881929B3-E7CD-40ED-AE20-74BF57C1A48B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8371725F-DD3C-4A6D-81E1-120AC8D5E3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8371725F-DD3C-4A6D-81E1-120AC8D5E3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8371725F-DD3C-4A6D-81E1-120AC8D5E3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8371725F-DD3C-4A6D-81E1-120AC8D5E3B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

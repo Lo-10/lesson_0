@@ -1,10 +1,11 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Dialogs;
-using Dialogs.Handlers;
-using Dialogs.Models;
-using Dialogs.Services;
+using Counters.Handlers;
+using Counters.Models;
+using Counters.Services;
+using lesson_0.Handlers;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(builder =>
-    {       
-        builder.Register((c, p) => new SendMessageHandler(c.Resolve<ILifetimeScope>()))
-           .As<IRequestHandler<Dialogs.Models.SendMessageRequest, string?>>();
-        builder.Register((c, p) => new DialogGetHandler(c.Resolve<ILifetimeScope>()))
-           .As<IRequestHandler<Dialogs.Models.DialogGetRequest, DialogMessage[]>>();
+    {
+        builder.Register((c, p) => new GetUnreadMessageCountHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<GetUnreadMessageCountRequest, int?>>();
+        builder.Register((c, p) => new IncreaseUnreadMessageCounterHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<IncreaseUnreadMessageCounterRequest, bool>>();
+        builder.Register((c, p) => new UnreadMessageCountLoadHandler(c.Resolve<ILifetimeScope>()))
+           .As<INotificationHandler<UnreadMessageCountLoadNotification>>();
+
 
         builder.Register((c, p) =>
         {
@@ -51,15 +55,20 @@ builder.Host
         builder.RegisterType<Mediator>()
                .As<IMediator>()
                .SingleInstance();
+
+        builder.RegisterType<MemoryCache>()
+               .As<IMemoryCache>()
+               .SingleInstance();
     });
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.Services.AddHostedService<UnreadMessageCountLoadService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<Dialogs.Services.DialogService> ();
+app.MapGrpcService<CounterService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Dialogs.Models
 {
-    public class SendMessageRequest : IRequest<bool?>
+    public class SendMessageRequest : IRequest<string?>
     {
         /// <summary>Текст сообщения</summary>
         /// <example>Привет, как дела?</example>

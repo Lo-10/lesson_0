@@ -30,7 +30,7 @@ namespace Dialogs.Services
 
             return new SendMessageReply
             {
-                Result = res.HasValue && res.Value
+                MessageId = res
             };
         }
 

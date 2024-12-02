@@ -105,6 +105,47 @@ namespace lesson_0.Controllers
                 });
             }
             else return Ok(result);
-        }       
+        }
+
+        /// <summary>
+        /// Получение количества непрочитанных сообщений
+        /// </summary>
+        /// <param name="userId" example="dd5feafb-166e-48de-a3cf-bb115b3827e9">Идентификатор пользователя-получателя</param>
+        /// <response code="200">Успешно получен диалог</response>
+        /// <response code="400">Невалидные данные</response>
+        /// <response code="401">Неавторизованный доступ</response>
+        /// <response code="500">Ошибка сервера</response>
+        /// <response code="503">Ошибка сервера</response>
+        [Authorize]
+        [HttpGet("api/v2.0/dialogs/unreaded")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ServerErrorModel), StatusCodes.Status500InternalServerError)]
+        [SwaggerResponseHeader(StatusCodes.Status500InternalServerError, "Retry-After", "integer", "Время, через которое еще раз нужно сделать запрос")]
+        [ProducesResponseType(typeof(ServerErrorModel), StatusCodes.Status503ServiceUnavailable)]
+        [SwaggerResponseHeader(StatusCodes.Status500InternalServerError, "Retry-After", "integer", "Время, через которое еще раз нужно сделать запрос")]
+        public async Task<IActionResult> GetUnreaded()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!Guid.TryParse(identity.FindFirst("userId").Value, out var userId)) return Unauthorized();
+
+            var result = await _mediator.Send(new UnreadMessageCountGetRequest
+            {
+                UserId = userId,
+                RequestId = HttpContext.TraceIdentifier
+            });
+
+            if (result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ServerErrorModel()
+                {
+                    Code = 500,
+                    RequestId = HttpContext.Connection.Id,
+                    Message = "Ошибка сервера"
+                });
+            }
+            else return Ok(result);
+        }
     }
 }

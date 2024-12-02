@@ -19,6 +19,15 @@ namespace lesson_0.Models
         [JsonPropertyName("to")]
         public required Guid ToUserId { get; set; }
 
+        /// <summary>Прочитано получателем</summary>
+        [JsonIgnore]
+        public bool IsRead { get; set; }
+
+        /// <summary>Идентификатор сообщения</summary>
+        /// <example>dd5feafb-166e-48de-a3cf-bb115b3827e9</example>
+        [JsonIgnore]
+        public string MessageId { get; set; }
+
         /// <summary>Время создания сообщения</summary>
         [JsonIgnore]
         public long CreatedAt { get; set; }

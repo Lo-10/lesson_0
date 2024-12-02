@@ -10,9 +10,10 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-	<ItemGroup>
-		<Protobuf Include="Protos\dialogs.proto" GrpcServices="Client" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="Protos\counters.proto" />
+    <None Remove="Protos\dialogs.proto" />
+  </ItemGroup>
 
 	<ItemGroup>
     <PackageReference Include="Autofac" Version="8.1.0" />
@@ -37,4 +38,9 @@
     <PackageReference Include="Swashbuckle.Examples" Version="4.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <Protobuf Include="Protos\counters.proto" GrpcServices="Client" />
+	  <Protobuf Include="Protos\dialogs.proto" GrpcServices="Client" />
+	</ItemGroup>
 </Project>

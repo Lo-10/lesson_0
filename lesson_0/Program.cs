@@ -58,9 +58,11 @@ builder.Host
         builder.Register((c, p) => new PostFeedLoadHandler(c.Resolve<ILifetimeScope>()))
            .As<INotificationHandler<PostFeedLoadNotification>>();
         builder.Register((c, p) => new SendMessageHandler(c.Resolve<ILifetimeScope>()))
-           .As<IRequestHandler<SendMessageRequest, bool?>>();
+           .As<IRequestHandler<SendMessageRequest, string?>>();
         builder.Register((c, p) => new DialogGetHandler(c.Resolve<ILifetimeScope>()))
            .As<IRequestHandler<DialogGetRequest, DialogMessageModel[]>>();
+        builder.Register((c, p) => new UnreadMessageCountGetHandler(c.Resolve<ILifetimeScope>()))
+           .As<IRequestHandler<UnreadMessageCountGetRequest, int?>>();
 
         builder.Register((c, p) =>
         {

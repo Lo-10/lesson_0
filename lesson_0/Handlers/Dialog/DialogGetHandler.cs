@@ -1,7 +1,6 @@
 ﻿namespace lesson_0.Handlers
 {
     using Autofac;
-    using DialogsClient;
     using Grpc.Net.Client;
     using lesson_0.Models;
     using lesson_0.Models.Requests.Dialog;
@@ -9,6 +8,7 @@
     using MediatR;
     using Npgsql;
     using System.Linq;
+    using DialogsClient;
 
     public partial class DialogGetHandler : IRequestHandler<Models.Requests.Dialog.DialogGetRequest, DialogMessageModel[]>
     {

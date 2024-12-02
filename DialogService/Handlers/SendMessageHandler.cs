@@ -5,7 +5,7 @@
     using Npgsql;
     using Dialogs.Models;
 
-    public partial class SendMessageHandler : IRequestHandler<SendMessageRequest, bool?>
+    public partial class SendMessageHandler : IRequestHandler<SendMessageRequest, string?>
     {
         private readonly NpgsqlDataSource _dataSource;
         private readonly ILogger<SendMessageHandler> _logger;
@@ -16,7 +16,7 @@
             _logger = scope.Resolve<ILogger<SendMessageHandler>>();
         }
 
-        public async Task<bool?> Handle(SendMessageRequest request, CancellationToken cancellationToken)
+        public async Task<string?> Handle(SendMessageRequest request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("{HandlerName}:{RequestId} Enter with request {@Request}", GetType().Name, request.RequestId, request);
             try
@@ -24,16 +24,20 @@
                 await using var cmd = _dataSource.CreateCommand();
 
                 var messageCreatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-                cmd.CommandText = $"INSERT INTO public.dialogs (FromUserId, ToUserId, Text, CreatedAt)" +
-                                  $" VALUES (@FromUserId, @ToUserId, @Text, @CreatedAt)";
+                var messageId = Guid.NewGuid().ToString();
+                cmd.CommandText = $"INSERT INTO public.dialogs (FromUserId, ToUserId, Text, CreatedAt, IsRead, MessageId)" +
+                                  $" VALUES (@FromUserId, @ToUserId, @Text, @CreatedAt, @IsRead, @MessageId) ";
                 cmd.Parameters.AddWithValue("FromUserId", request.FromUserId);
                 cmd.Parameters.AddWithValue("ToUserId", request.ToUserId);
                 cmd.Parameters.AddWithValue("Text", request.Text);
                 cmd.Parameters.AddWithValue("CreatedAt", messageCreatedAt);
+                cmd.Parameters.AddWithValue("IsRead", false);
+                cmd.Parameters.AddWithValue("MessageId", messageId);
+
 
                 await cmd.ExecuteNonQueryAsync(cancellationToken);
 
-                return true;
+                return messageId;
             }
             catch (Exception ex)
             {

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "CountersClient";
+
+package counters;
+
+service CounterService {
+  rpc IncreaseUnreadMessageCounter (MessageCreatedRequest) returns (MessageCreatedReply);
+  rpc GetUnreadMessageCount (GetUnreadMessageCountRequest) returns (GetUnreadMessageCountReply);
+}
+
+message MessageCreatedRequest {
+  /// <summary>Идентификатор пользователя-отправителя</summary>
+  string FromUserId = 1;
+  /// <summary>Идентификатор пользователя-получателя</summary>
+  string ToUserId = 2;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 3;
+  /// <summary>Идентификатор сообщения</summary>
+  string MessageId = 4;
+}
+
+message MessageCreatedReply {
+  bool result = 1;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 2;
+}
+
+message GetUnreadMessageCountRequest {
+  /// <summary>Идентификатор пользователя-отправителя</summary>
+  string UserId = 1;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 2;
+}
+
+message GetUnreadMessageCountReply {
+  /// <summary>Колличество непрочитанных сообщений</summary>
+  int32 result = 1;
+  /// <summary>Идентификатор запроса (x-request-id)</summary>
+  string RequestId = 2;
+}

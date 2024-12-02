@@ -37,19 +37,26 @@ CREATE TABLE IF NOT EXISTS public.dialogs
     touserid character varying COLLATE pg_catalog."default" NOT NULL,
     text character varying COLLATE pg_catalog."default" NOT NULL,
     createdat bigint NOT NULL,
+    isread boolean NOT NULL DEFAULT true,
+    messageid character varying COLLATE pg_catalog."default",
     CONSTRAINT dialogs_pkey PRIMARY KEY (fromuserid, touserid)
 )
 
 ```
 2. Из корневой директории репы собрать образ: ```docker build -t lesson_0 .``` 
 2.1. Из директории DialogService собрать образ сервиса диалогов ```docker build -t dialogs .```
+2.2. Из директории Counters собрать образ сервиса счетчиков ```docker build -t counters .```
 3. Заменить переменные относящиеся к БД и запустить контейнер
 ```
-docker run -it -p 7071:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_master=172.30.64.1" -e "pgsql_port_master=5432" -e "pgsql_server_slave=172.30.64.1" -e "pgsql_port_slave=5434" -e "pgsql_db=lesson_0" -e "pgsql_user=postgres" -e "pgsql_password=password" -e "rabbit_server=172.30.64.1" -e "rabbit_port=5672" -e "rabbit_user=user" -e "rabbit_password=password" -e "dialogs_grpc_url=http://172.30.64.1:7072" -e "ASPNETCORE_ENVIRONMENT=Development" lesson_0
+docker run -it -p 7071:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_master=172.30.64.1" -e "pgsql_port_master=5432" -e "pgsql_server_slave=172.30.64.1" -e "pgsql_port_slave=5434" -e "pgsql_db=lesson_0" -e "pgsql_user=postgres" -e "pgsql_password=password" -e "rabbit_server=172.30.64.1" -e "rabbit_port=5672" -e "rabbit_user=user" -e "rabbit_password=password" -e "dialogs_grpc_url=http://172.30.64.1:7072" -e "counters_grpc_url=http://172.30.64.1:7073" -e "ASPNETCORE_ENVIRONMENT=Development" lesson_0
 ```
 3.1. Заменить переменные относящиеся к БД и запустить контейнер сервиса диалогов
 ```
 docker run -it -p 7072:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_master=172.30.64.1" -e "pgsql_port_master=5432" -e "pgsql_server_slave=172.30.64.1" -e "pgsql_port_slave=5434" -e "pgsql_db=lesson_0" -e "pgsql_user=postgres" -e "pgsql_password=password" -e "ASPNETCORE_ENVIRONMENT=Development" dialogs
+```
+3.2. Заменить переменные относящиеся к БД и запустить контейнер сервиса счетчиков
+```
+docker run -it -p 7073:8080 -e "ASPNETCORE_HTTP_PORTS=8080" -e "pgsql_server_master=172.30.64.1" -e "pgsql_port_master=5432" -e "pgsql_server_slave=172.30.64.1" -e "pgsql_port_slave=5434" -e "pgsql_db=lesson_0" -e "pgsql_user=postgres" -e "pgsql_password=password" -e "ASPNETCORE_ENVIRONMENT=Development" counters
 ```
 4. Swagger UI доступен по пути /swagger/index.html
 5. AsyncAPI UI доступен по пути /asyncapi/ui/index.html
